@@ -255,6 +255,40 @@
             outline: none;
             box-shadow: 0 28px 80px rgba(0, 0, 0, 0.6);
         }
+        .scroll-buttons {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 40;
+        }
+        .scroll-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 999px;
+            border: none;
+            background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            opacity: 0.8;
+        }
+        .scroll-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.5);
+            opacity: 1;
+        }
+        .scroll-btn:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 <body>
@@ -408,6 +442,10 @@
             <br>
             <a class="return-link" href="index.html">Volver al inicio</a>
         </div>
+        <div class="scroll-buttons">
+            <button class="scroll-btn" id="scrollTop" title="Ir al tope">↑</button>
+            <button class="scroll-btn" id="scrollBottom" title="Ir al fondo">↓</button>
+        </div>
     </main>
     <script>
         const modal = document.getElementById('modal');
@@ -459,6 +497,24 @@
                 videoPlayer.pause();
                 videoPlayer.currentTime = 0;
             }
+        });
+
+        // Scroll buttons
+        const scrollTopBtn = document.getElementById('scrollTop');
+        const scrollBottomBtn = document.getElementById('scrollBottom');
+
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        scrollBottomBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: 'smooth'
+            });
         });
     </script>
 </body>
