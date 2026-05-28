@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Índice del Proyecto</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f9fafb;
+            color: #111827;
+        }
+        .page-header {
+            background: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
+            color: white;
+            padding: 36px 20px;
+            text-align: center;
+        }
+        .page-header h1 {
+            margin: 0;
+            font-size: clamp(2rem, 3vw, 3.2rem);
+        }
+        .page-header p {
+            margin: 12px auto 0;
+            max-width: 800px;
+            opacity: 0.9;
+        }
+        .index-grid {
+            display: grid;
+            gap: 18px;
+            max-width: 1100px;
+            margin: 28px auto;
+            padding: 0 18px 32px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        }
+        .index-card {
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+            padding: 24px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+        .index-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 22px 55px rgba(15, 23, 42, 0.14);
+        }
+        .index-card h2 {
+            margin: 0 0 10px;
+            font-size: 1.25rem;
+        }
+        .index-card p {
+            margin: 0;
+            line-height: 1.75;
+            color: #4b5563;
+        }
+        .section {
+            max-width: 1000px;
+            margin: 0 auto 36px;
+            padding: 0 18px 24px;
+            border-bottom: 2px solid rgba(15, 23, 42, 0.18);
+        }
+        .section.evidencias {
+            background: #020203;
+            color: #f8fafc;
+            border-radius: 22px;
+            padding: 32px 24px;
+            border: none;
+        }
+        .evidence-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+        .evidence-item {
+            position: relative;
+            min-height: 140px;
+            border: 2px solid rgba(56, 189, 248, 0.75);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(248, 250, 252, 0.7);
+            font-weight: 600;
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+        }
+        .evidence-item:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 18px 34px rgba(56, 189, 248, 0.22);
+            border-color: rgba(56, 189, 248, 1);
+        }
+        .evidence-item:active {
+            transform: scale(0.96);
+        }
+        .evidence-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        .evidence-item:hover img {
+            transform: scale(1.04);
+        }
+        .evidence-item::after {
+            content: "+";
+            font-size: 2rem;
+            line-height: 1;
+        }
+        .evidence-item.has-image::after {
+            content: "";
+        }
+        .modal {
+            position: fixed;
+            inset: 0;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 50;
+            padding: 20px;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+        .modal.open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        .modal__content {
+            width: auto;
+            height: auto;
+            max-width: calc(100vw - 40px);
+            max-height: calc(100vh - 40px);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 28px 80px rgba(0, 0, 0, 0.6);
+            transform: scale(0.96);
+            transition: transform 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+        }
+        .modal.open .modal__content {
+            transform: scale(1);
+        }
+        .modal__image {
+            display: block;
+            max-width: calc(100vw - 80px);
+            max-height: calc(100vh - 80px);
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+        .modal__close {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 999px;
+            background: #38bdf8;
+            color: white;
+            font-size: 1.35rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            box-shadow: 0 10px 24px rgba(56, 189, 248, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            z-index: 60;
+        }
+        .modal__close:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 28px rgba(56, 189, 248, 0.45);
+        }
+        .section:last-of-type {
+            border-bottom: none;
+        }
+        .section.evidencias h1,
+        .section.evidencias h2,
+        .section.evidencias p {
+            color: #f8fafc;
+        }
+        .section h3 {
+            margin-top: 0;
+            font-size: 1.8rem;
+            color: #0f172a;
+        }
+        .section p {
+            color: #475569;
+            line-height: 1.8;
+        }
+        .return-link {
+            display: inline-block;
+            margin: 0 auto 32px;
+            padding: 12px 24px;
+            background: #2563eb;
+            color: white;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .creditos-button {
+            display: inline-block;
+            margin: 20px auto 28px;
+            padding: 12px 26px;
+            background: #38bdf8;
+            color: white;
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+        .creditos-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(56, 189, 248, 0.3);
+            background: #22c6ff;
+        }
+        .video-modal {
+            position: fixed;
+            inset: 0;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.92);
+            z-index: 55;
+            padding: 20px;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+        .video-modal.open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        .video-player {
+            width: 100%;
+            max-width: 920px;
+            max-height: calc(100vh - 100px);
+            border-radius: 18px;
+            outline: none;
+            box-shadow: 0 28px 80px rgba(0, 0, 0, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <header class="page-header">
+        <h1>Índice del proyecto</h1>
+        <p>Accede rápido a las secciones clave de tu trabajo. Haz clic en cualquier tarjeta para ir directamente al contenido que necesitas revisar.</p>
+    </header>
+    <main>
+        <section class="index-grid">
+            <a class="index-card" href="#introduccion">
+                <h2>Introducción</h2>
+                <p>Descripción breve del proyecto y el contexto de la base de datos no relacional.</p>
+            </a>
+            <a class="index-card" href="#MONGODB">
+                <h2>MongoDB</h2>
+                <p>Introducción a la base de datos no relacional MongoDB y su implementación en el proyecto.</p>
+            </a>
+            <a class="index-card" href="#REDIS">
+                <h2>Redis</h2>
+                <p>Introducción a la base de datos en memoria Redis y su implementación en el proyecto.</p>
+            </a>
+            <a class="index-card" href="#indexacion">
+                <h2>Indexación</h2>
+                <p>Conceptos clave sobre la indexación y su importancia en el rendimiento de consultas.</p>
+            </a>
+            <a class="index-card" href="#json y bson">
+                <h2>JSON y BSON</h2>
+                <p>Explicación de los formatos de datos JSON y BSON y su uso en las bases de datos no relacionales.</p>
+            </a>
+            <a class="index-card" href="#evidencias">
+                <h2>Evidencias</h2>
+                <p>Zona destinada a subir y documentar las evidencias de trabajo del proyecto.</p>
+            </a>
+        </section>
+        <div class="section" id="introduccion">
+            <h1>Introducción</h1>
+            <h2>1. ¿Qué son las bases de datos No Relacionales?</h2>
+            <p>Son sistemas de almacenamiento de información que no utilizan el modelo tradicional de tablas de filas y columnas (SQL). En su lugar, organizan los datos mediante estructuras flexibles como documentos (JSON), gráficos, clave-valor o columnas anchas.</p>
+            <p>En pocas palabras: Están diseñadas para manejar grandes volúmenes de datos abstractos, no estructurados o que cambian constantemente, sin la necesidad de un esquema rígido.</p>
+            <h2>2. Importancia de las bases de datos NoSQL</h2>
+            <p>Escalabilidad Horizontal: Permiten distribuir la carga de datos entre múltiples servidores de forma económica y eficiente, soportando millones de usuarios simultáneos.</p>
+            <p>Flexibilidad de Esquema: Los datos se pueden guardar sin definir una estructura previa, lo que acelera el desarrollo y permite adaptar la base de datos a cambios en tiempo real.</p>
+            <p>Alto Rendimiento: Al evitar operaciones complejas de unión (joins), ofrecen una velocidad de lectura y escritura excepcionalmente alta para aplicaciones web y móviles.</p>
+            <h2>3. Diferencias de NoSQL y SQL</h2>
+            <p>Modelo de Datos: SQL utiliza un modelo relacional basado en tablas, mientras que NoSQL emplea modelos flexibles como documentos, clave-valor, gráficos o columnas anchas.</p>
+            <p>Esquema: SQL requiere un esquema definido antes de almacenar datos, mientras que NoSQL permite un esquema dinámico o sin esquema, facilitando la adaptación a cambios en los datos.</p>
+            <p>Escalabilidad: SQL generalmente escala verticalmente (mejorando el hardware), mientras que NoSQL está diseñado para escalar horizontalmente (agregando más servidores).</p>
+            <h2>4. Objetivo del Portafolio Digital</h2>
+            <p>El objetivo principal de este portafolio es recopilar, organizar y demostrar de manera práctica las competencias adquiridas en el manejo de tecnologías no relacionales.</p>
+            <p>Sirve como una evidencia estructurada de mi capacidad para diseñar, implementar y optimizar soluciones de almacenamiento modernas, reflejando el progreso técnico y los proyectos clave desarrollados a lo largo del curso.</p>
+        </div>
+        <div class="section" id="MONGODB">
+            <h1>MongoDB</h1>
+            <h2>1.¿Qué es MongoDB?</h2>
+            <p>MongoDB es una base de datos NoSQL (no relacional), de código abierto y basada en documentos.</p>
+            <p>A diferencia de las bases de datos tradicionales (como MySQL o PostgreSQL) que guardan la información en tablas rígidas con filas y columnas, MongoDB guarda los datos en estructuras flexibles llamadas documentos BSON (que es esencialmente un formato JSON pero binario).</p>
+            <h2>2. Características de MongoDB</h2>
+            <p>Esquema flexible (Schema-less): No necesitas definir qué columnas va a tener tu base de datos antes de meter información. Un documento puede tener 3 campos y el siguiente puede tener 10 si lo necesitas.</p>
+            <p>Escalabilidad horizontal: Está pensada desde su origen para crecer. Si te quedas sin espacio o potencia, puedes distribuir los datos en varios servidores (un proceso llamado sharding) de forma muy natural.</p>
+            <p>Consultas potentes: Aunque no usa SQL, tiene su propio lenguaje de consultas muy intuitivo y potente que te permite filtrar, ordenar y agregar datos rápidamente.</p>
+            <h2>3. ¿Cuándo se utiliza?</h2>
+            <p>MongoDB es ideal para aplicaciones que requieren alta escalabilidad, flexibilidad en el esquema y un alto rendimiento en operaciones de lectura y escritura.</p>
+            <p>Es comúnmente utilizado en aplicaciones web modernas, sistemas de gestión de contenido, análisis de big data y cualquier escenario donde los datos no estructurados o semi-estructurados sean predominantes.</p>
+        </div>
+        <div class="section" id="REDIS">
+            <h1>Redis</h1>
+            <h2>1.¿Qué es Redis?</h2>
+            <p>Redis es una base de datos en memoria de código abierto que almacena datos en estructuras de datos como cadenas, hashes, listas, conjuntos y conjuntos ordenados.</p>
+            <h2>2. Características de Redis</h2>
+            <p>Alto rendimiento: Redis es extremadamente rápido porque almacena los datos en memoria RAM.</p>
+            <p>Flexibilidad: Soporta múltiples tipos de datos y operaciones complejas.</p>
+            <p>Persistencia: Aunque los datos se almacenan en memoria, Redis ofrece opciones de persistencia para evitar la pérdida de información.</p>
+            <h2>3. ¿Cuándo se utiliza?</h2>
+            <p>Redis es ideal para aplicaciones que requieren un acceso muy rápido a los datos, como cachés, sesiones de usuario, colas de mensajes y sistemas de puntuación en tiempo real.</p>
+            <h2>4. Comparación con MongoDB</h2>
+            <p>La principal diferencia entre Redis y MongoDB radica en su forma de almacenamiento: Redis almacena los datos en memoria RAM, lo que lo hace extremadamente rápido, mientras que MongoDB almacena los datos en disco, lo que ofrece mayor capacidad de almacenamiento y persistencia.</p>
+            <p>En términos de casos de uso, Redis es ideal para aplicaciones que requieren un acceso muy rápido a los datos, como cachés, sesiones de usuario, colas de mensajes y sistemas de puntuación en tiempo real. Por otro lado, MongoDB es más adecuado para aplicaciones que necesitan una base de datos flexible y escalable para manejar grandes volúmenes de datos no estructurados o semi-estructurados.</p>  
+        </div>
+        <div class="section" id="indexacion">
+            <h1>Indexación</h1>
+            <h2>1. ¿Qué es la indexación?</h2>
+            <p>La indexación es una técnica que mejora el rendimiento de las consultas al permitir búsquedas más rápidas dentro de una base de datos.</p>
+            <h2>2. Beneficios</h2>
+            <p>Reduce el tiempo de lectura, acelera la recuperación de datos y mejora el rendimiento general en consultas grandes o complejas.</p>
+            <h2>3. Cómo se usa</h2>
+            <p>En bases de datos NoSQL, los índices se aplican a campos específicos para optimizar filtros, ordenamientos y combinaciones de datos.</p>
+        </div>
+        <div class="section" id="json y bson">
+            <h1>JSON y BSON</h1>
+            <h2>1. ¿Qué es JSON?</h2>
+            <p>JSON (JavaScript Object Notation) es un formato de texto ligero para el intercambio de datos. Es fácil de leer y escribir para los humanos, y fácil de analizar y generar para las máquinas. JSON se utiliza comúnmente para transmitir datos en aplicaciones web entre un servidor y un cliente.</p>
+            <h2>2. ¿Qué es BSON?</h2>
+            <p>BSON (Binary JSON) es un formato de datos binario que se utiliza principalmente en MongoDB. Es una extensión de JSON que incluye tipos de datos adicionales, como fechas y binarios, y está diseñado para ser eficiente en términos de espacio y velocidad de análisis.</p>
+            <h2>3. Diferencias entre JSON y BSON</h2>
+            <p>Formato: JSON es un formato de texto, mientras que BSON es un formato binario.</p>
+            <p>Tipos de datos: BSON incluye tipos de datos adicionales que no están presentes en JSON, como fechas y binarios.</p>
+            <p>Uso: JSON se utiliza ampliamente para el intercambio de datos en aplicaciones web, mientras que BSON se utiliza principalmente en MongoDB para almacenar y transmitir datos de manera eficiente.</p>
+        </div>
+        <div class="section evidencias" id="evidencias">
+            <h1>Evidencias de trabajo</h1>
+            <div class="evidence-grid">
+                <div class="evidence-item has-image" data-image="file:///C:/Users/jomon/OneDrive/Desktop/evidencias proyecto/20260528_110600.jpg">
+                    <img src="file:///C:/Users/jomon/OneDrive/Desktop/evidencias proyecto/20260528_110600.jpg" alt="Evidencia 1">
+                </div>
+                <div class="evidence-item has-image" data-image="file:///C:/Users/jomon/OneDrive/Desktop/evidencias proyecto/20260528_110853.jpg">
+                    <img src="file:///C:/Users/jomon/OneDrive/Desktop/evidencias proyecto/20260528_110853.jpg" alt="Evidencia 2">
+                </div>
+                <div class="evidence-item has-image" data-image="file:///C:/Users/jomon/OneDrive/Desktop/evidencias proyecto/20260528_111008.jpg">
+                    <img src="file:///C:/Users/jomon/OneDrive/Desktop/evidencias proyecto/20260528_111008.jpg" alt="Evidencia 3">
+                </div>
+                <div class="evidence-item has-image" data-image="file:///C:/Users/jomon/OneDrive/Desktop/evidencias proyecto/20260528_111037.jpg">
+                    <img src="file:///C:/Users/jomon/OneDrive/Desktop/evidencias proyecto/20260528_111037.jpg" alt="Evidencia 4">
+                </div>
+                <div class="evidence-item has-image" data-image="file:///C:/Users/jomon/OneDrive/Desktop/evidencias proyecto/20260528_111103.jpg">
+                    <img src="file:///C:/Users/jomon/OneDrive/Desktop/evidencias proyecto/20260528_111103.jpg" alt="Evidencia 5">
+                </div>
+                <div class="evidence-item has-image" data-image="file:///C:/Users/jomon/OneDrive/Desktop/evidencias proyecto/20260528_111137.jpg">
+                    <img src="file:///C:/Users/jomon/OneDrive/Desktop/evidencias proyecto/20260528_111137.jpg" alt="Evidencia 6">
+                </div>
+                <div class="evidence-item has-image" data-image="file:///C:/Users/jomon/OneDrive/Desktop/evidencias proyecto/20260528_111316.jpg">
+                    <img src="file:///C:/Users/jomon/OneDrive/Desktop/evidencias proyecto/20260528_111316.jpg" alt="Evidencia 7">
+                </div>
+                <div class="evidence-item has-image" data-image="file:///C:/Users/jomon/OneDrive/Desktop/evidencias proyecto/Captura de pantalla 2026-05-19 140353.png">
+                    <img src="file:///C:/Users/jomon/OneDrive/Desktop/evidencias proyecto/Captura de pantalla 2026-05-19 140353.png" alt="Evidencia 8">
+                </div>
+                <div class="evidence-item has-image" data-image="file:///C:/Users/jomon/OneDrive/Desktop/evidencias proyecto/MONGO DB_page-0001.jpg">
+                    <img src="file:///C:/Users/jomon/OneDrive/Desktop/evidencias proyecto/MONGO DB_page-0001.jpg" alt="Evidencia 9">
+                </div>
+                <div class="evidence-item has-image" data-image="file:///C:/Users/jomon/OneDrive/Desktop/evidencias proyecto/mongodbconexion.png">
+                    <img src="file:///C:/Users/jomon/OneDrive/Desktop/evidencias proyecto/mongodbconexion.png" alt="Evidencia 10">
+                </div>
+            </div>
+        </div>
+        <div class="modal" id="modal">
+            <button class="modal__close" id="modalClose">×</button>
+            <div class="modal__content">
+                <img class="modal__image" id="modalImage" src="" alt="Evidencia ampliada">
+            </div>
+        </div>
+        <div class="video-modal" id="videoModal">
+            <button class="modal__close" id="videoClose">×</button>
+            <div class="modal__content">
+                <video class="video-player" id="videoPlayer" controls>
+                    <source src="C:\Users\jomon\OneDrive\Desktop\evidencias proyecto\star wars.mp4" type="video/mp4">
+                    <!-- Agrega aquí la ruta de tu video MP4 -->
+                    Tu navegador no soporta video.
+                </video>
+            </div>
+        </div>
+        <div style="text-align:center;">
+            <button class="creditos-button" id="creditosButton">Créditos épicos</button>
+            <br>
+            <a class="return-link" href="index.html">Volver al inicio</a>
+        </div>
+    </main>
+    <script>
+        const modal = document.getElementById('modal');
+        const modalImage = document.getElementById('modalImage');
+        const modalClose = document.getElementById('modalClose');
+        const videoModal = document.getElementById('videoModal');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const videoClose = document.getElementById('videoClose');
+        const creditosButton = document.getElementById('creditosButton');
+
+        document.querySelectorAll('.evidence-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const imageUrl = item.dataset.image;
+                if (!imageUrl) {
+                    return;
+                }
+                modalImage.src = imageUrl;
+                modal.classList.add('open');
+            });
+        });
+
+        creditosButton.addEventListener('click', () => {
+            videoPlayer.currentTime = 0;
+            videoPlayer.play();
+            videoModal.classList.add('open');
+        });
+
+        modalClose.addEventListener('click', () => {
+            modal.classList.remove('open');
+            modalImage.src = '';
+        });
+
+        videoClose.addEventListener('click', () => {
+            videoModal.classList.remove('open');
+            videoPlayer.pause();
+            videoPlayer.currentTime = 0;
+        });
+
+        modal.addEventListener('click', event => {
+            if (event.target === modal) {
+                modal.classList.remove('open');
+                modalImage.src = '';
+            }
+        });
+
+        videoModal.addEventListener('click', event => {
+            if (event.target === videoModal) {
+                videoModal.classList.remove('open');
+                videoPlayer.pause();
+                videoPlayer.currentTime = 0;
+            }
+        });
+    </script>
+</body>
+</html>

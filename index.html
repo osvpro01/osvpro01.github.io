@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Final</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2937;
+        }
+        .banner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 320px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+            color: white;
+        }
+        .banner__content {
+            max-width: 900px;
+        }
+        .banner__title {
+            font-size: clamp(2.4rem, 4vw, 4.5rem);
+            margin: 0 0 18px;
+            line-height: 1.05;
+        }
+        .banner__subtitle {
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            margin: 0 auto;
+            max-width: 650px;
+            line-height: 1.6;
+            opacity: 0.92;
+        }
+        .banner__button {
+            display: inline-block;
+            margin-top: 28px;
+            padding: 14px 30px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s ease;
+        }
+        .banner__button:hover {
+            background: rgba(255,255,255,0.28);
+        }
+        .hero-image {
+            position: relative;
+            min-height: 420px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            background-color: #1f2937;
+            background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=80');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: white;
+        }
+        .hero-image::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(15,23,42,0.55);
+        }
+        .hero-image__content {
+            position: relative;
+            max-width: 860px;
+            text-align: center;
+            z-index: 1;
+        }
+        .hero-image__title {
+            margin: 0 0 16px;
+            font-size: clamp(2rem, 3vw, 3.2rem);
+            line-height: 1.1;
+        }
+        .hero-image__text {
+            margin: 0 auto;
+            max-width: 680px;
+            font-size: 1.05rem;
+            line-height: 1.75;
+            opacity: 0.95;
+        }
+    </style>
+</head>
+<body>
+    <header class="banner">
+        <div class="banner__content">
+            <h1 class="banner__title">Proyecto final no relacionales</h1>
+            <p class="banner__subtitle">CBTIS105</p>
+            <p class="banner__subtitle">implementa bases de datos no relacionales</p>
+            <p class="banner__subtitle">Jose Osvaldo Montante Pimienta</p>
+            <p class="banner__subtitle">SERGIO ALEJANDRO QUINTANILLA VAZQUEZ</p>
+            <p class="banner__subtitle">4.-J</p>
+            <p class="banner__subtitle">27/05/2026</p>
+            <a href="indice.html" class="banner__button">Comenzar ahora</a>
+        </div>
+    </header>
+    <section class="hero-image"></section>
+</body>
+</html> 
